@@ -18,9 +18,14 @@ def recordWord (word):#record a word
 	data = rd.record ('Đọc: "%s" ...' % word,time=2)
 	rd.save (data, '%s.wav'%word)
 	print ('--------------------------------------')
-	
+def recordByTimes (word,times=9):
+	for i in range(times):
+		recordWord (word+"%d"%(i));
+
 def main ():
 	
+	recordByTimes ('khong')
+	return 0;
 	# rd.plot ('chị.wav')
 	print ('Bắt đầu thu thập dữ liệu ...')
 	words = readInput ()

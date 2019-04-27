@@ -51,7 +51,7 @@ def clamp (val, mn, mx):
 		return
 	return val
 
-def getWave_pivot_jump (signal, pivot = 0, step=50, threshold=100000, outPick = False):# 3rd improvement
+def getWave_pivot_jump (signal, pivot = 0, step=500, threshold=120, outPick = False):# 3rd improvement: using step range
 
 	L = pivot
 
@@ -94,6 +94,42 @@ def getWave_pivot (signal, pivot = 0, threshold=100000, outPick = False):# secon
 		return signal[L:R]
 		
 	return signal[L:R], L
+
+def plotEach (signal):
+
+	# plot (signal) 
+	mx, idx = getMax (signal)
+	cut, L = getWave_pivot_jump (signal, pivot=idx, threshold=130, step=600, outPick=True) # silent thresholds
+	plot (cut)
+
+
+def samplePlot (fList):
+	import numpy as np
+	import matplotlib.pyplot as plt
+
+	from matplotlib.ticker import NullFormatter  # useful for `logit` scale
+
+	# Fixing random state for reproducibility
+	# plot with various axes scales
+	plt.figure(1)
+	i = 0
+	for file in fList:
+		i+=1
+		print (file)
+		plt.subplot(330+i)
+		signal = rd.importSignal (file)
+		plotEach (signal)
+
+			
+	# Format the minor tick labels of the y-axis into empty strings with
+	# `NullFormatter`, to avoid cumbering the axis with too many labels.
+	plt.gca().yaxis.set_minor_formatter(NullFormatter())
+	# Adjust the subplot layout, because the logit one may take more space
+	# than usual, due to y-tick labels like "1 - 10^{-3}"
+	plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
+	                    wspace=0.35)
+
+	plt.show()
 def getWave (signal, threshold=100000, outPick=False): #1st thinking
 	L = 0
 	R = len (signal)
@@ -142,33 +178,15 @@ def plot (signal, offset = 0):
 # 	    screen.update(image)
 
 def myplot ():# plot a signal
-	plt.show (block=False)
 
-	for file in listFile():
-		print (file)
-		plt.clf ()
-		signal = rd.importSignal (file)
-		plot (signal) 
-		mx, idx = getMax (signal)
-		cut, L = getWave_pivot_jump (signal, pivot=idx, threshold=130, step=600, outPick=True) # silent threshold
-
-		plot (cut, L)
-		sd.default.samplerate = 44100
-		sd.play (cut)
-
-
-		plt.draw ()
-		plt.pause(0.05)
-		sd.wait ()
-
-
-
-	
+	plotEach (importSignal ('anh.wav'))
+	plt.show ()	
 	pass
 def main ():
 	#test ()
-	myplot ()
-
+	#myplot ()
+	import sys
+	samplePlot ([sys.argv[1]+'%d.wav'%x for x in range (9)])
 	pass
 
 if __name__=='__main__':

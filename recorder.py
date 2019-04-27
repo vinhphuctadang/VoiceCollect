@@ -1,4 +1,4 @@
-import sounddevice as sd 
+﻿import sounddevice as sd 
 import soundfile as sf 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,18 +15,19 @@ def importSignal (name):
 		raise ValueError ('Mone wave supported')
 	return signal
 
-def plot (name):
-	signal = importSignal (name)
-	print (signal)
+def plot (signal,name='sound'):
+	
+	# print (signal)
 	plt.figure(1)
 	plt.title(name)
 	plt.plot(signal)
 	plt.show()
+
 def play (name):
 
 	med = media (name)
 	med.play ()
-	sleep (med.duration-0.212)
+	sleep (med.duration-0.3)
 	return med
 
 def record (prompt, time=1):
@@ -41,9 +42,7 @@ def save (data,name):
 
 def init ():
 	mixer.init ()
-
 def main ():
-	play ('nghiệp.mp3')
 	pass
 
 # init ()

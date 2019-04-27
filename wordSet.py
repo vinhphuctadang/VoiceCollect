@@ -1,8 +1,7 @@
 from collect import readInput 
 
 __delimiter=',;.\n?*!#"-():“”/\\‘’–%… '
-
-
+	
 def nextWord (buffer):
 	word = ''
 	for c in buffer:
